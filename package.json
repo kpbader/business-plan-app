@@ -1,4 +1,22 @@
 {
+  "name": "business-plan-app",
+  "version": "1.0.0",
+  "description": "## Description",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kpbader/business-plan-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kpbader/business-plan-app/issues"
+  },
+  "homepage": "https://github.com/kpbader/business-plan-app#readme",
   "dependencies": {
     "console.table": "^0.10.0",
     "inquirer": "^8.2.1",
