@@ -18,6 +18,10 @@ class Model {
     findEmployees(){
         return this.db.promise().query(`SELECT id, first_name, last_name, manager_id FROM employee;` `SELECT title, department_id, salary FROM role;`);
     }
+
+    updatedE(){
+        return this.db.promise().query(`INSERT INTO employee VALUE ?`)
+    }
 }
 
 module.exports = new Model(db);

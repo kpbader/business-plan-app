@@ -138,8 +138,10 @@ function addEmployee() {
 
 // update an employee........
 const updateEmployee = async () => {
-
-}
+    db.updatedE().then(([data]) => {
+        console.table(data)
+    }).then(()=> managerStart())
+};
 
 // view departments........
 function viewDepartments(){
