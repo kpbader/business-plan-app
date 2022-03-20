@@ -19,9 +19,9 @@ class Model {
         return this.db.promise().query(`SELECT id, first_name, last_name, manager_id FROM employee;` `SELECT title, department_id, salary FROM role;`);
     }
 
-    updatedE(){
-        return this.db.promise().query(`INSERT INTO employee VALUE ?`)
-    }
+    updateE(employeeId, roleId) {
+        return this.db.promise().query("UPDATE employee SET role_id = ? WHERE id = ?", [roleId, employeeId]);
+      }
 }
 
 module.exports = new Model(db);

@@ -114,10 +114,7 @@ function addEmployee() {
             name: 'employee_role',
             message: 'Please select which role the employee belongs to.',
             choices: [
-                'Financial Specialist',
-                'Designer',
-                'Logistics Manager',
-                'Marketing Specialist'
+                
             ]
         },
         //create a list of all available employees and allow the user to select the appropriate manager from the list
@@ -126,10 +123,7 @@ function addEmployee() {
             name: 'employees_manager',
             message: 'If employee has a manager, select the manager name.',
             choices: [
-                'George Clooney',
-                'Jack Skelington',
-                'Jennifer Anniston',
-                'No manager'
+            
             ]
         }
     ])
@@ -137,9 +131,9 @@ function addEmployee() {
 
 
 // update an employee........
-const updateEmployee = async () => {
+function updateEmployee(){
     db.updatedE().then(([data]) => {
-        console.table(data)
+        
     }).then(()=> managerStart())
 };
 
