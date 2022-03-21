@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
-const db = require('./db/queries');
-require('console.table');
+const db = require('./db/queries.js');
+// require('console.table');
 
 
 function start(){
@@ -54,17 +54,20 @@ function managerStart() {
 };
 
 function addDepartment() {
-    inquier.prompt([
+    inquirer.prompt([
         {
             type: 'input',
             name: 'department_added',
             message: 'What is the name of the department you want to add?'
         }
-    ])
+    ]).then((data) => {
+        console.log(data);
+        addDepartmentToDB(data);
+    })
 };
 
 function addRole() {
-    inquier.prompt([
+    inquirer.prompt([
         {
             type: 'input',
             name: 'role_title',
@@ -96,7 +99,7 @@ function addRole() {
 };
 
 function addEmployee() {
-    inquier.prompt([
+    inquirer.prompt([
         {
             type: 'input',
             name: 'employee_firstname',
@@ -143,6 +146,7 @@ function viewDepartments(){
         console.table(data)
     }).then(()=> managerStart())
 };
+
 // view roles........
 function viewRoles(){
     db.findRoles().then(([data])=>{
@@ -158,3 +162,14 @@ function viewEmployees(){
 };
 
 
+function addDepartmentToDB (name) {
+    const sql = `INSERT INTO department(name)
+                VALUES(?)`;
+    db.query(sql, [name], (err, results) => {
+        if(err) {
+            console.log(err);
+            return;
+        }
+        console.log('Department has been added');
+    });
+}

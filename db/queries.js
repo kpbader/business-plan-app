@@ -16,7 +16,32 @@ class Model {
 
     //findEmployees needs to display employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
     findEmployees(){
-        return this.db.promise().query(`SELECT id, first_name, last_name, manager_id FROM employee;` `SELECT title, department_id, salary FROM role;`);
+        return this.db.promise().query(`SELECT
+        employee.id,
+        employee.first_name,
+        employee.last_name,
+        role.title,
+        department.name AS department,
+        role.salary,
+        CONCAT(manager_table.first_name, ' ', manager_table.last_name) AS manager
+    FROM
+        employee
+    LEFT JOIN
+        role 
+    ON
+        employee.role_id = role.id 
+    LEFT JOIN
+        department 
+    ON 
+        role.department_id = department.id 
+    LEFT JOIN
+        employee manager_table
+    ON 
+        manager_table.id = employee.manager_id;`);
+    }
+
+    departmentAdd(department){
+        return this.db.promise().query(`INSERT INTO department(name) VALUES ('${department}');`)
     }
 
     updateE(employeeId, roleId) {
