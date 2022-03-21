@@ -44,6 +44,18 @@ class Model {
         return this.db.promise().query(`INSERT INTO department(name) VALUES ('${department}');`)
     }
 
+    roleAdd(title, salary, department){
+        return this.db.promise().query(`INSERT INTO role(role.title, role.salary, role.department_id)
+        SELECT '${title}', '${salary}', department.id FROM department WHERE department.name = '${department}';`)
+    }
+
+    employeeAdd(firstName, lastName, employeeRole, fnManager, lnManager){
+        return this.db.promise().query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
+        SELECT '${firstName}', '${lastName}', role.id, m.id
+        FROM role, employees m
+        WHERE role.title = ? AND m.first_name = ? AND m.last_name = ?`)
+    }
+
     updateE(employeeId, roleId) {
         return this.db.promise().query("UPDATE employee SET role_id = ? WHERE id = ?", [roleId, employeeId]);
       }

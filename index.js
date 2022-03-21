@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
+const { roleAdd } = require('./db/queries.js');
 const db = require('./db/queries.js');
-// require('console.table');
+require('console.table');
 
 
 function start(){
@@ -62,8 +63,8 @@ function addDepartment() {
         }
     ]).then((data) => {
         console.log(data);
-        addDepartmentToDB(data);
-    })
+        db.departmentAdd(data);
+    }).then(() => managerStart())
 };
 
 function addRole() {
@@ -80,22 +81,23 @@ function addRole() {
         },
         //create a list of all available departments and allow the user to select the appropriate department from the list
         {
-            type: 'list',
-            name: 'department_list',
+            type: 'input',
+            name: 'role_department',
             message: 'What department would the new role be assigned to?',
-            choices: [
-                'Finance',
-                'Design',
-                'Logistics',
-                'Advertising'
-            ]
+           
         },
         // {
         //     type: 'input',
         //     name: 'department',
         //     message: 'Which department does this role belong to?'
         // }
-    ])
+    ]).then((data) => {
+        console.log(data);
+       const title = data.role_title;
+       const salary = data.role_salary;
+       const department = data.role_department;
+       db.roleAdd(title, salary, department)
+    }).then(() => managerStart())
 };
 
 function addEmployee() {
@@ -113,23 +115,28 @@ function addEmployee() {
 
         //create a list of all the avaialble roles and allow the user to select one from the list
         {
-            type: 'list',
+            type: 'input',
             name: 'employee_role',
-            message: 'Please select which role the employee belongs to.',
-            choices: [
-                
-            ]
+            message: 'Please enter which role the employee belongs to.',
+            
         },
         //create a list of all available employees and allow the user to select the appropriate manager from the list
         {
-            type: 'list',
+            type: 'input',
             name: 'employees_manager',
-            message: 'If employee has a manager, select the manager name.',
-            choices: [
-            
-            ]
+            message: 'If employee has a manager, enter the manager name.',
         }
-    ])
+    ]).then((data) => {
+        console.log(data);
+       const firstName = data.employee_firstname;
+       const lastName = data.employee_lastname;
+       const employeeRole = data.employee_role;
+       let employeeManager = data.employees_manager;
+       employeeManager = employeeManager.split(' ');
+       const fnManager = employeeManager[0];
+       const lnManager = employeeManager[1];
+       db.employeeAdd(firstName, lastName, employeeRole, fnManager, lnManager)
+    }).then(() => managerStart())
 };
 
 
@@ -161,15 +168,3 @@ function viewEmployees(){
     }).then(()=> managerStart())
 };
 
-
-function addDepartmentToDB (name) {
-    const sql = `INSERT INTO department(name)
-                VALUES(?)`;
-    db.query(sql, [name], (err, results) => {
-        if(err) {
-            console.log(err);
-            return;
-        }
-        console.log('Department has been added');
-    });
-}
