@@ -50,13 +50,14 @@ class Model {
     }
 
     employeeAdd(firstName, lastName, employeeRole, fnManager, lnManager){
-        return this.db.promise().query(`INSERT INTO employees (first_name, last_name, role_id, manager_id)
+        return this.db.promise().query(`INSERT INTO employee (first_name, last_name, role_id, manager_id)
         SELECT '${firstName}', '${lastName}', role.id, m.id
-        FROM role, employees m
-        WHERE role.title = ? AND m.first_name = ? AND m.last_name = ?`)
+        FROM role, employee m
+        WHERE role.title = '${employeeRole}' AND m.first_name = '${fnManager}' AND m.last_name = '${lnManager}'`)
     }
 
     updateE(employeeId, roleId) {
+        console.log(employeeId, roleId);
         return this.db.promise().query("UPDATE employee SET role_id = ? WHERE id = ?", [roleId, employeeId]);
       }
 }

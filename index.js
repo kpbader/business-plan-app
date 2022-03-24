@@ -1,5 +1,5 @@
 const inquirer = require('inquirer');
-const { roleAdd } = require('./db/queries.js');
+const { roleAdd, updateE } = require('./db/queries.js');
 const db = require('./db/queries.js');
 require('console.table');
 
@@ -45,7 +45,7 @@ function managerStart() {
           case 'Add employee':
               addEmployee()           
               break;
-          case 'Update employee':
+          case 'Update employee role':
               updateEmployee()
               break;
           default:
@@ -142,9 +142,49 @@ function addEmployee() {
 
 // update an employee........
 function updateEmployee(){
-    db.updatedE().then(([data]) => {
-        
-    }).then(()=> managerStart())
+    const employeeRoleAndID = {}; 
+    db.findEmployees().then(([data])=> {
+        const employeeArr = data.map((emp)=> {
+            return {
+                name: `${emp.first_name} ${emp.last_name}`,
+                value: emp.id 
+        }
+        })
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employeeID',
+                message: 'Which employee would you like to update?',
+                choices: employeeArr
+            }
+        ])
+        .then(data => {
+            employeeRoleAndID['empID'] = data.employeeID;
+        }).then(() => {
+            db.findRoles().then(([data]) => {
+                const roleArr = data.map((role) => {
+                    return {
+                        name: role.title,
+                        value: role.id
+                    }
+                })
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'roleID',
+                        message: 'What is the new role?',
+                        choices: roleArr
+                    }
+                ])
+                .then((data) => {
+                    employeeRoleAndID['roleID'] = data.roleID
+                    db.updateE(employeeRoleAndID.empID, employeeRoleAndID.roleID)
+                })
+            })
+            
+        })
+    })
+   
 };
 
 // view departments........
