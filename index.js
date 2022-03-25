@@ -63,7 +63,8 @@ function addDepartment() {
         }
     ]).then((data) => {
         console.log(data);
-        db.departmentAdd(data);
+        const department = data.department_added;
+        db.departmentAdd(department);
     }).then(() => managerStart())
 };
 
